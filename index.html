@@ -3,93 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rachel Vincent - Music Portfolio</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            color: #fff;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-        h1 {
-            color: #fff;
-        }
-        #player {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        button {
-            background-color: #f0f;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            cursor: pointer;
-        }
-    </style>
+    <title>Test Page</title>
 </head>
-<body>
-    <h1>Rachel Vincent</h1>
-    <p>Instrumental music composer specializing in orchestral instrumentation</p>
-    <div id="player">
-        <h2>Now Playing: <span id="trackName">Track A</span></h2>
-        <button onclick="previousTrack()">Previous</button>
-        <button onclick="playPause()" id="playPauseBtn">Play</button>
-        <button onclick="nextTrack()">Next</button>
-    </div>
-    <audio id="audioPlayer"></audio>
-
-    <script>
-        const tracks = [
-            { id: 'A', audio: 'audio/MpTrack14.mp3' },
-            { id: 'B', audio: 'audio/MpTrack5.mp3' },
-            { id: 'C', audio: 'audio/MpTrack12.mp3' },
-            { id: 'D', audio: 'audio/MpTrack10.mp3' },
-            { id: 'E', audio: 'audio/MpTrack7.mp3' },
-            { id: 'F', audio: 'audio/MpTrack8.mp3' },
-            { id: 'G', audio: 'audio/MpTrack11.mp3' }
-        ];
-
-        let currentTrack = 0;
-        const audioPlayer = document.getElementById('audioPlayer');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const trackNameSpan = document.getElementById('trackName');
-
-        function loadTrack(index) {
-            audioPlayer.src = tracks[index].audio;
-            trackNameSpan.textContent = `Track ${tracks[index].id}`;
-        }
-
-        function playPause() {
-            if (audioPlayer.paused) {
-                audioPlayer.play();
-                playPauseBtn.textContent = 'Pause';
-            } else {
-                audioPlayer.pause();
-                playPauseBtn.textContent = 'Play';
-            }
-        }
-
-        function previousTrack() {
-            currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
-            loadTrack(currentTrack);
-            playPause();
-        }
-
-        function nextTrack() {
-            currentTrack = (currentTrack + 1) % tracks.length;
-            loadTrack(currentTrack);
-            playPause();
-        }
-
-        loadTrack(currentTrack);
-    </script>
+<body style="background-color: black; color: white; font-family: Arial, sans-serif;">
+    <h1>Hello, World!</h1>
+    <p>If you can see this, the page is working.</p>
 </body>
 </html>
