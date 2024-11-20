@@ -4,126 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rachel Vincent - Music Portfolio</title>
-    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script src="https://unpkg.com/@lucide/react@latest"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Ensure the page has a dark background */
         body {
-            background-color: black;
             margin: 0;
             padding: 0;
+            background-color: black;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        .player-container {
+            background-color: #181818;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            max-width: 42rem;
+            text-align: center;
+        }
+        .header {
+            background-color: #121212;
+            padding: 2rem;
+            text-align: center;
+        }
+        .button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 1rem;
+            color: #9ca3af;
+            font-size: 2rem;
+            transition: color 0.2s;
+        }
+        .button:hover {
+            color: white;
+        }
+        .play-button {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 9999px;
+            background: linear-gradient(to right, #ec4899, #f97316);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+        }
+        .play-button:hover {
+            opacity: 0.9;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
         }
     </style>
 </head>
 <body>
-    <div id="root"></div>
-    <script type="text/babel">
-        // Import necessary icons from Lucide
-        const { Play, Pause, SkipBack, SkipForward } = lucide;
+    <header class="header">
+        <h1 class="text-5xl font-bold mb-4">Rachel Vincent</h1>
+        <p class="text-xl text-gray-400">Instrumental music composer specializing in orchestral instrumentation</p>
+    </header>
 
-        // Your existing React component code goes here
-        function Button({ children, onClick, className, ...props }) {
-            return (
-                <button
-                    onClick={onClick}
-                    className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background ${className}`}
-                    {...props}
-                >
-                    {children}
-                </button>
-            );
+    <main class="min-h-screen flex items-center justify-center p-8">
+        <div class="player-container">
+            <div class="mb-8">
+                <h2 class="text-3xl font-semibold mb-2">Now Playing</h2>
+                <p class="text-xl text-gray-400" id="track-display">Track A</p>
+            </div>
+            <div class="controls">
+                <button class="button" onclick="previousTrack()">⏮️</button>
+                <button class="play-button" onclick="togglePlay()">▶️</button>
+                <button class="button" onclick="nextTrack()">⏭️</button>
+            </div>
+        </div>
+    </main>
+
+    <audio id="audio-player"></audio>
+
+    <script>
+        const tracks = [
+            { id: 'A', audio: 'audio/MpTrack14.mp3' },
+            { id: 'B', audio: 'audio/MpTrack5.mp3' },
+            { id: 'C', audio: 'audio/MpTrack12.mp3' },
+            { id: 'D', audio: 'audio/MpTrack10.mp3' },
+            { id: 'E', audio: 'audio/MpTrack7.mp3' },
+            { id: 'F', audio: 'audio/MpTrack8.mp3' },
+            { id: 'G', audio: 'audio/MpTrack11.mp3' }
+        ];
+
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+        const audioPlayer = document.getElementById('audio-player');
+        const trackDisplay = document.getElementById('track-display');
+        const playButton = document.querySelector('.play-button');
+
+        function loadTrack(index) {
+            currentTrackIndex = index;
+            audioPlayer.src = tracks[index].audio;
+            trackDisplay.textContent = `Track ${tracks[index].id}`;
         }
 
-        function MusicPortfolio() {
-            const [activeTrackIndex, setActiveTrackIndex] = React.useState(0);
-            const [isPlaying, setIsPlaying] = React.useState(false);
-            const audioRef = React.useRef(null);
-
-            const tracks = [
-                { id: 'A', audio: 'audio/MpTrack14.mp3' },
-                { id: 'B', audio: 'audio/MpTrack5.mp3' },
-                { id: 'C', audio: 'audio/MpTrack12.mp3' },
-                { id: 'D', audio: 'audio/MpTrack10.mp3' },
-                { id: 'E', audio: 'audio/MpTrack7.mp3' },
-                { id: 'F', audio: 'audio/MpTrack8.mp3' },
-                { id: 'G', audio: 'audio/MpTrack11.mp3' },
-            ];
-
-            React.useEffect(() => {
-                if (audioRef.current) {
-                    audioRef.current.src = tracks[activeTrackIndex].audio;
-                    if (isPlaying) {
-                        audioRef.current.play();
-                    }
-                }
-            }, [activeTrackIndex, isPlaying]);
-
-            const handlePlayPause = () => {
-                if (audioRef.current) {
-                    if (isPlaying) {
-                        audioRef.current.pause();
-                    } else {
-                        audioRef.current.play();
-                    }
-                    setIsPlaying(!isPlaying);
-                }
-            };
-
-            const handlePrevious = () => {
-                setActiveTrackIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : tracks.length - 1));
-            };
-
-            const handleNext = () => {
-                setActiveTrackIndex((prevIndex) => (prevIndex < tracks.length - 1 ? prevIndex + 1 : 0));
-            };
-
-            return (
-                <div className="min-h-screen bg-black text-white flex flex-col">
-                    <header className="bg-[#121212] p-8 shadow-lg text-center">
-                        <h1 className="text-5xl font-bold tracking-tight">Rachel Vincent</h1>
-                        <p className="text-xl text-gray-400 mt-4">Instrumental music composer specializing in orchestral instrumentation</p>
-                    </header>
-
-                    <main className="flex-grow flex items-center justify-center p-8">
-                        <div className="bg-[#181818] shadow-lg rounded-lg p-8 w-full max-w-2xl text-center">
-                            <div className="mb-8">
-                                <h2 className="text-3xl font-semibold mb-2">Now Playing</h2>
-                                <p className="text-xl text-gray-400">Track {tracks[activeTrackIndex].id}</p>
-                            </div>
-                            <div className="flex justify-center items-center space-x-8">
-                                <Button
-                                    onClick={handlePrevious}
-                                    className="text-gray-400 hover:text-white"
-                                    aria-label="Previous track"
-                                >
-                                    <SkipBack size={32} />
-                                </Button>
-                                <Button
-                                    onClick={handlePlayPause}
-                                    className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white w-16 h-16 rounded-full"
-                                    aria-label={isPlaying ? "Pause" : "Play"}
-                                >
-                                    {isPlaying ? <Pause size={32} /> : <Play size={32} />}
-                                </Button>
-                                <Button
-                                    onClick={handleNext}
-                                    className="text-gray-400 hover:text-white"
-                                    aria-label="Next track"
-                                >
-                                    <SkipForward size={32} />
-                                </Button>
-                            </div>
-                        </div>
-                    </main>
-                    <audio ref={audioRef} />
-                </div>
-            );
+        function togglePlay() {
+            if (isPlaying) {
+                audioPlayer.pause();
+                playButton.textContent = '▶️';
+            } else {
+                audioPlayer.play();
+                playButton.textContent = '⏸️';
+            }
+            isPlaying = !isPlaying;
         }
 
-        ReactDOM.render(<MusicPortfolio />, document.getElementById('root'));
+        function previousTrack() {
+            currentTrackIndex = currentTrackIndex > 0 ? currentTrackIndex - 1 : tracks.length - 1;
+            loadTrack(currentTrackIndex);
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        }
+
+        function nextTrack() {
+            currentTrackIndex = currentTrackIndex < tracks.length - 1 ? currentTrackIndex + 1 : 0;
+            loadTrack(currentTrackIndex);
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        }
+
+        // Initialize the first track
+        loadTrack(0);
     </script>
 </body>
 </html>
