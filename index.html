@@ -3,10 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Page</title>
+    <title>Rachel Vincent - Music Portfolio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .player {
+            background-color: #181818;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover {
+            background-color: #444;
+        }
+        #playPauseBtn {
+            background: linear-gradient(to right, #ec4899, #f97316);
+        }
+    </style>
 </head>
-<body style="background-color: black; color: white; font-family: Arial, sans-serif;">
-    <h1>Hello, World!</h1>
-    <p>If you can see this, the page is working.</p>
+<body>
+    <header>
+        <h1>Rachel Vincent</h1>
+        <p>Instrumental music composer specializing in orchestral instrumentation</p>
+    </header>
+    <div class="player">
+        <h2>Now Playing</h2>
+        <p id="trackName">Track A</p>
+        <div class="controls">
+            <button onclick="previousTrack()">Previous</button>
+            <button id="playPauseBtn" onclick="playPause()">Play</button>
+            <button onclick="nextTrack()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        function previousTrack() {
+            console.log('Previous track');
+        }
+
+        function playPause() {
+            console.log('Play/Pause');
+        }
+
+        function nextTrack() {
+            console.log('Next track');
+        }
+    </script>
 </body>
 </html>
