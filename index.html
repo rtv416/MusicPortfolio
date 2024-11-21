@@ -35,23 +35,34 @@
         .controls {
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
+            gap: 1.5rem; /* Updated gap */
+            margin-top: 1.5rem; /* Updated margin */
         }
         button {
             background-color: #333;
             color: #fff;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
         }
         button:hover {
             background-color: #444;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
         }
         #playPauseBtn {
             background: linear-gradient(to right, #ec4899, #f97316);
+            padding: 14px 28px;
+            font-weight: bold;
+        }
+        #playPauseBtn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
         }
     </style>
 </head>
@@ -64,9 +75,9 @@
         <h2>Now Playing</h2>
         <p id="trackName">Track A</p>
         <div class="controls">
-            <button onclick="previousTrack()">Previous</button>
-            <button id="playPauseBtn" onclick="togglePlay()">Play</button>
-            <button onclick="nextTrack()">Next</button>
+            <button onclick="previousTrack()">⏮️</button>
+            <button id="playPauseBtn" onclick="togglePlay()">▶️</button>
+            <button onclick="nextTrack()">⏭️</button>
         </div>
     </div>
     <audio id="audioPlayer"></audio>
@@ -97,10 +108,10 @@
         function togglePlay() {
             if (isPlaying) {
                 audioPlayer.pause();
-                playPauseBtn.textContent = 'Play';
+                playPauseBtn.textContent = '▶️';
             } else {
                 audioPlayer.play();
-                playPauseBtn.textContent = 'Pause';
+                playPauseBtn.textContent = '⏸️';
             }
             isPlaying = !isPlaying;
         }
