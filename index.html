@@ -16,14 +16,14 @@
             align-items: center;
             min-height: 100vh;
         }
-        header {
+        header, footer {
             text-align: center;
             background: linear-gradient(to right, #ec4899, #f97316);
             padding: 2rem;
             width: 100%;
             box-sizing: border-box;
         }
-        header h1, header p {
+        header h1, header p, footer p {
             color: #000;
             text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
             margin: 0;
@@ -32,7 +32,7 @@
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
         }
-        .player {
+        .player, .track-list {
             background-color: #181818;
             padding: 2rem;
             border-radius: 10px;
@@ -77,6 +77,31 @@
             transform: translateY(-2px) scale(1.05);
             box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
         }
+        .track-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .track-buttons button {
+            font-size: 1rem;
+            padding: 10px;
+            background: linear-gradient(to right, #ec4899, #f97316);
+            color: #fff;
+        }
+        .track-buttons button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+        }
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 2rem 0;
+        }
     </style>
 </head>
 <body>
@@ -84,15 +109,24 @@
         <h1>Rachel Vincent</h1>
         <p>Instrumental music composer specializing in orchestral instrumentation</p>
     </header>
-    <div class="player">
-        <h2>Now Playing</h2>
-        <p id="trackName">Track A</p>
-        <div class="controls">
-            <button onclick="previousTrack()">⏮</button>
-            <button id="playPauseBtn" onclick="togglePlay()">▶</button>
-            <button onclick="nextTrack()">⏭</button>
+    <main>
+        <div class="player">
+            <h2>Now Playing</h2>
+            <p id="trackName">Track A</p>
+            <div class="controls">
+                <button onclick="previousTrack()" aria-label="Previous track">⏮</button>
+                <button id="playPauseBtn" onclick="togglePlay()" aria-label="Play or pause">▶</button>
+                <button onclick="nextTrack()" aria-label="Next track">⏭</button>
+            </div>
         </div>
-    </div>
+        <div class="track-list">
+            <h2>Track List</h2>
+            <div class="track-buttons" id="trackButtons"></div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Rachel Vincent. All rights reserved.</p>
+    </footer>
     <audio id="audioPlayer"></audio>
 
     <script>
@@ -111,20 +145,25 @@
         const audioPlayer = document.getElementById('audioPlayer');
         const playPauseBtn = document.getElementById('playPauseBtn');
         const trackNameElement = document.getElementById('trackName');
+        const trackButtonsContainer = document.getElementById('trackButtons');
 
         function loadTrack(index) {
+            currentTrackIndex = index;
             const track = tracks[index];
             audioPlayer.src = track.audio;
             trackNameElement.textContent = `Track ${track.id}`;
+            updateTrackButtons();
         }
 
         function togglePlay() {
             if (isPlaying) {
                 audioPlayer.pause();
                 playPauseBtn.textContent = '▶';
+                playPauseBtn.setAttribute('aria-label', 'Play');
             } else {
                 audioPlayer.play();
                 playPauseBtn.textContent = '⏸';
+                playPauseBtn.setAttribute('aria-label', 'Pause');
             }
             isPlaying = !isPlaying;
         }
@@ -145,8 +184,27 @@
             }
         }
 
-        // Initialize the first track
+        function createTrackButtons() {
+            tracks.forEach((track, index) => {
+                const button = document.createElement('button');
+                button.textContent = track.id;
+                button.onclick = () => loadTrack(index);
+                button.setAttribute('aria-label', `Play Track ${track.id}`);
+                trackButtonsContainer.appendChild(button);
+            });
+        }
+
+        function updateTrackButtons() {
+            const buttons = trackButtonsContainer.getElementsByTagName('button');
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].style.opacity = i === currentTrackIndex ? '0.6' : '1';
+                buttons[i].style.transform = i === currentTrackIndex ? 'scale(0.95)' : '';
+            }
+        }
+
+        // Initialize the first track and create track buttons
         loadTrack(currentTrackIndex);
+        createTrackButtons();
 
         // Add event listener for when a track ends
         audioPlayer.addEventListener('ended', nextTrack);
