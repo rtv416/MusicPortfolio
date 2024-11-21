@@ -10,7 +10,7 @@
             background-color: #000;
             color: #fff;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -18,7 +18,15 @@
         }
         header {
             text-align: center;
-            margin-bottom: 2rem;
+            background: linear-gradient(to right, #ec4899, #f97316);
+            padding: 2rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        header h1, header p {
+            color: #000;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+            margin: 0;
         }
         h1 {
             font-size: 2.5rem;
@@ -31,33 +39,38 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            margin-top: 2rem;
         }
         .controls {
             display: flex;
             justify-content: center;
-            gap: 1.5rem; /* Updated gap */
-            margin-top: 1.5rem; /* Updated margin */
+            gap: 1.5rem;
+            margin-top: 1.5rem;
         }
         button {
-            background-color: #333;
-            color: #fff;
+            background-color: #fff;
+            color: #000;
             border: none;
             padding: 12px 24px;
             border-radius: 25px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.5rem;
             transition: all 0.3s ease;
             outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         button:hover {
-            background-color: #444;
+            background-color: #f0f0f0;
             transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
         }
         #playPauseBtn {
             background: linear-gradient(to right, #ec4899, #f97316);
             padding: 14px 28px;
             font-weight: bold;
+            color: #fff;
         }
         #playPauseBtn:hover {
             opacity: 0.9;
@@ -75,9 +88,9 @@
         <h2>Now Playing</h2>
         <p id="trackName">Track A</p>
         <div class="controls">
-            <button onclick="previousTrack()">⏮️</button>
-            <button id="playPauseBtn" onclick="togglePlay()">▶️</button>
-            <button onclick="nextTrack()">⏭️</button>
+            <button onclick="previousTrack()">⏮</button>
+            <button id="playPauseBtn" onclick="togglePlay()">▶</button>
+            <button onclick="nextTrack()">⏭</button>
         </div>
     </div>
     <audio id="audioPlayer"></audio>
@@ -108,10 +121,10 @@
         function togglePlay() {
             if (isPlaying) {
                 audioPlayer.pause();
-                playPauseBtn.textContent = '▶️';
+                playPauseBtn.textContent = '▶';
             } else {
                 audioPlayer.play();
-                playPauseBtn.textContent = '⏸️';
+                playPauseBtn.textContent = '⏸';
             }
             isPlaying = !isPlaying;
         }
